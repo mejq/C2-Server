@@ -1,5 +1,4 @@
 import json
-
 from flask import Flask, request , jsonify
 import Encryption
 from Encryption import decrypt_data

