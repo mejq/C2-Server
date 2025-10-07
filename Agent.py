@@ -53,9 +53,9 @@ def execute_task(task):
 
     if task_type == 'shell':
         command = task.get('command')
-        run = task.get(command)
+        run_shell(command)
     elif task_type == 'download':
-        command = task.get('url')
+        url = task.get('url')
         save_as = task.get('save_as')
         download_file(url, save_as)
     elif task_type == 'sleep':
