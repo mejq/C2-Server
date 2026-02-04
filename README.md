@@ -1,19 +1,39 @@
 
-# Simple Python C2 Framework
+# Educational Python C2 Framework (Lab & Research)
+A minimal Command & Control (C2) framework built for **security research, malware analysis labs, and detection engineering experiments**.
 
-A lightweight Command & Control (C2) framework written in Python. It consists of a Flask-based server and a client-side agent that utilizes TLS fingerprint impersonation to evade detection.
+This project is designed to help blue teamers and red teamers understand:
+- How modern C2 traffic looks
+- Which behaviors trigger detection
+- How TLS fingerprinting and beacon timing affect network visibility
 
-## Features
+## Research-Oriented Features
 
--   **Encrypted Communication:** All traffic between the Agent and C2 is encrypted using Fernet (AES).
-    
--   **TLS Impersonation:** The agent uses `curl_cffi` to mimic real browser fingerprints (Chrome/Safari) to blend in with normal traffic.
-    
--   **Dynamic Sleep:** The agent alters its beacon intervals based on the time of day (Work hours vs. Nights/Weekends) with random jitter.
-    
--   **Tasking System:** Supports Shell execution, File downloads, and Sleep configuration updates.
-    
--   **Persistence:** The agent generates and saves a unique ID to maintain identity across restarts.
+- Encrypted C2 Communication (Fernet / AES)
+- TLS Fingerprint Impersonation (curl_cffi)
+- Time-based beacon intervals with jitter
+- Simple tasking mechanism for lab simulations
+- Agent identity persistence for behavior tracking
+
+
+## Why this project exists
+This framework was created as a **learning and research tool**, not as a production-ready malware platform.
+
+Primary goals:
+- Study C2 communication patterns
+- Experiment with TLS fingerprint impersonation
+- Analyze beacon timing and jitter
+- Build detection rules in controlled lab environments
+
+
+## Detection & Defensive Notes
+
+This project can be used to:
+- Generate sample encrypted C2 traffic for IDS/IPS testing
+- Build SIEM and EDR detection rules
+- Analyze TLS JA3 / fingerprint-based detection strategies
+- Observe how beacon jitter impacts anomaly-based detection
+- Compare predictable vs randomized beacon intervals
 
 
 ## Project Structure
@@ -99,5 +119,13 @@ _Note: Since the server expects encrypted JSON, you need a small helper script t
  `{"type": "sleep", "min": 5, "max": 10}`
     
 
+
 ## Disclaimer
-This project is for **educational purposes and security research only**. Usage of this code for attacking targets without prior mutual consent is illegal. The developer assumes no liability and is not responsible for any misuse or damage caused by this program.
+
+This project is strictly for:
+- Educational purposes
+- Malware analysis labs
+- Authorized security research
+
+Do NOT deploy this framework outside environments you own or explicitly have permission to test.
+
