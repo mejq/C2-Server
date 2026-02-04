@@ -39,7 +39,7 @@ pip install flask curl-cffi cryptography python-dotenv request
 
 ### 1. Generate Encryption Key
 
-You must generate a Fernet key and save it in a `.env` file. Both the Server and the Agent (if bundled) need access to this logic/key to communicate.
+You must generate a Fernet key and save it in a `.env` file. Both the Server and the Agent need access to this logic/key to communicate.
 
 Run this in Python to get a key:
 ```
