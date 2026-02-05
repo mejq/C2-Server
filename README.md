@@ -1,5 +1,5 @@
 
-# Educational Python C2 Framework (Lab & Research)
+# Python Command and Control C2 Server
 A minimal Command & Control (C2) framework built for **security research, malware analysis labs, and detection engineering experiments**.
 
 This project is designed to help blue teamers and red teamers understand:
