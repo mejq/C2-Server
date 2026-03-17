@@ -1,0 +1,26 @@
+2026-03-17 23:07:15 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-17 23:07:15 - ERROR   - __main__ - Failed to read file: agents.json → Expecting value: line 1 column 1 (char 0)
+2026-03-17 23:07:30 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-17 23:07:30 - ERROR   - __main__ - Failed to read file: agents.json → Expecting value: line 1 column 1 (char 0)
+2026-03-17 23:07:45 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-17 23:07:45 - INFO    - __main__ - File not found, using default value: agents.json
+2026-03-17 23:08:23 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-17 23:08:23 - INFO    - __main__ - File not found, using default value: agents.json
+2026-03-17 23:09:43 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-17 23:09:43 - INFO    - __main__ - File not found, using default value: agents.json
+2026-03-17 23:09:43 - INFO    - werkzeug - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on https://127.0.0.1:8443
+ * Running on https://10.116.64.182:8443
+2026-03-17 23:09:43 - INFO    - werkzeug - [33mPress CTRL+C to quit[0m
+2026-03-17 23:09:43 - INFO    - werkzeug -  * Restarting with stat
+2026-03-17 23:09:43 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-17 23:09:43 - INFO    - __main__ - File not found, using default value: agents.json
+2026-03-17 23:09:43 - WARNING - werkzeug -  * Debugger is active!
+2026-03-17 23:09:43 - INFO    - werkzeug -  * Debugger PIN: 191-323-922
+2026-03-17 23:11:43 - INFO    - werkzeug -  * Detected change in '/home/mejo/C2 Server/Agent.py', reloading
+2026-03-17 23:11:43 - INFO    - werkzeug -  * Restarting with stat
+2026-03-17 23:11:43 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-17 23:11:43 - INFO    - __main__ - File not found, using default value: agents.json
+2026-03-17 23:11:43 - WARNING - werkzeug -  * Debugger is active!
+2026-03-17 23:11:43 - INFO    - werkzeug -  * Debugger PIN: 191-323-922
