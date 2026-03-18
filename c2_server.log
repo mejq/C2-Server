@@ -152,3 +152,29 @@
 2026-03-18 11:20:17 - INFO    - __main__ - File not found, using default value: agents.json
 2026-03-18 11:20:17 - WARNING - werkzeug -  * Debugger is active!
 2026-03-18 11:20:17 - INFO    - werkzeug -  * Debugger PIN: 508-347-390
+2026-03-18 11:26:43 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-18 11:26:43 - INFO    - __main__ - File not found, using default value: agents.json
+2026-03-18 11:26:43 - INFO    - werkzeug - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on https://127.0.0.1:5000
+ * Running on https://10.116.64.65:5000
+2026-03-18 11:26:43 - INFO    - werkzeug - [33mPress CTRL+C to quit[0m
+2026-03-18 11:26:43 - INFO    - werkzeug -  * Restarting with stat
+2026-03-18 11:26:43 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-18 11:26:43 - INFO    - __main__ - File not found, using default value: agents.json
+2026-03-18 11:26:43 - WARNING - werkzeug -  * Debugger is active!
+2026-03-18 11:26:43 - INFO    - werkzeug -  * Debugger PIN: 508-347-390
+2026-03-18 11:38:28 - INFO    - __main__ - Patch request from 10.116.64.65 - UA: Mozilla/5.0 (Windows NT; Windows NT 10.0; en-US) WindowsPowerShell/5.1.26100.7462
+2026-03-18 11:38:28 - INFO    - werkzeug - 10.116.64.65 - - [18/Mar/2026 11:38:28] "GET /update/system-patch HTTP/1.1" 200 -
+2026-03-18 11:43:59 - INFO    - werkzeug -  * Detected change in '/home/mejo/C2 Server/Agent.py', reloading
+2026-03-18 11:43:59 - INFO    - werkzeug -  * Restarting with stat
+2026-03-18 11:43:59 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-18 11:43:59 - INFO    - __main__ - File not found, using default value: agents.json
+2026-03-18 11:43:59 - WARNING - werkzeug -  * Debugger is active!
+2026-03-18 11:43:59 - INFO    - werkzeug -  * Debugger PIN: 508-347-390
+2026-03-18 11:44:30 - INFO    - werkzeug -  * Detected change in '/home/mejo/C2 Server/Agent.py', reloading
+2026-03-18 11:44:30 - INFO    - werkzeug -  * Restarting with stat
+2026-03-18 11:44:30 - INFO    - __main__ - File not found, using default value: tasks.json
+2026-03-18 11:44:30 - INFO    - __main__ - File not found, using default value: agents.json
+2026-03-18 11:44:30 - WARNING - werkzeug -  * Debugger is active!
+2026-03-18 11:44:30 - INFO    - werkzeug -  * Debugger PIN: 508-347-390
