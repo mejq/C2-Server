@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 import json
+import ssl
 import logging
 import os.path
 from flask import Flask, request, jsonify, Response
@@ -171,7 +172,6 @@ def push_task():
 
 
 if __name__ == '__main__':
-    import ssl
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.load_cert_chain('server.crt', 'server.key')
-    app.run(host='0.0.0.0', port=8443, ssl_context=context, debug=True)
+    app.run(host='0.0.0.0', port=5000, ssl_context=context, debug=True)
